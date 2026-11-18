@@ -1,11 +1,38 @@
+
+from games import blackjack_game, roulette_game
+
+
+# Available tools
+TOOLS = {
+    "blackjack": {
+        "description": "Play a game of blackjack",
+        "keywords": ["blackjack", "black jack"],
+        "call": blackjack_game
+    },
+
+    "roulette": {
+        "description": "Play roulette",
+        "keywords": ["roulette"],
+        "call": roulette_game
+    }
+}
+
+
 def dealer(user_input):
-    command = user_input.lower()
+    """Interpret user input and execute matching tools."""
 
-    if "blackjack" in command:
-        return play_blackjack()
+    message = user_input.lower().strip()
 
-    elif "roulette" in command:
-        return play_roulette()
+    if message in ["exit", "quit", "bye"]:
+        return "exit"
 
-    else:
-        return "Welcome! Would you like blackjack or roulette?"
+    if message in ["help", "games", "menu"]:
+        return "Available games: " + ", ".join(TOOLS)
+
+    for name, tool in TOOLS.items():
+        if any(word in message for word in tool["keywords"]):
+            print(f"Dealer: Excellent choice! Let's play {name}.")
+            tool["call"]()
+            return f"Dealer: Welcome back from {name}!"
+
+    return "Dealer: I didn't understand. Type 'help' for games."
