@@ -1,6 +1,6 @@
 
 from games import blackjack_game, roulette_game
-
+from dealer_prompt import DEALER_INSTRUCTIONS
 
 # Available tools
 TOOLS = {
