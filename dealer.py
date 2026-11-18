@@ -18,21 +18,22 @@ TOOLS = {
 }
 
 
-def dealer(user_input):
-    """Interpret user input and execute matching tools."""
 
+from ai_client import ask_dealer
+
+
+def dealer(user_input):
     message = user_input.lower().strip()
 
     if message in ["exit", "quit", "bye"]:
         return "exit"
 
-    if message in ["help", "games", "menu"]:
-        return "Available games: " + ", ".join(TOOLS)
+    response = ask_dealer(user_input, mock=True)
 
-    for name, tool in TOOLS.items():
-        if any(word in message for word in tool["keywords"]):
-            print(f"Dealer: Excellent choice! Let's play {name}.")
-            tool["call"]()
-            return f"Dealer: Welcome back from {name}!"
+    tool_name = response.get("tool")
+    content = response.get("content", "")
 
-    return "Dealer: I didn't understand. Type 'help' for games."
+    if tool_name in TOOLS:
+        TOOLS[tool_name]["call"]()
+
+    return f"Dealer: {content}"
